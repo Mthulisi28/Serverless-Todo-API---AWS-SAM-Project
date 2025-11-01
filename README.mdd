@@ -1,0 +1,265 @@
+# 🚀 Serverless Todo API - AWS SAM Project
+
+A production-ready serverless REST API built with AWS SAM, demonstrating Infrastructure as Code principles and modern cloud-native development practices.
+
+![AWS](https://img.shields.io/badge/AWS-Lambda-FF9900?style=for-the-badge&logo=amazon-aws)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python)
+![SAM](https://img.shields.io/badge/AWS-SAM-FF4F00?style=for-the-badge&logo=amazon-aws)
+![DynamoDB](https://img.shields.io/badge/AWS-DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb)
+
+## 📋 Table of Contents
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [API Endpoints](#api-endpoints)
+- [Getting Started](#getting-started)
+- [Deployment](#deployment)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Learning Outcomes](#learning-outcomes)
+
+## 🎯 Overview
+
+This project demonstrates a complete serverless architecture using AWS SAM (Serverless Application Model). The entire infrastructure - including Lambda functions, API Gateway, DynamoDB table, and IAM roles - is defined in a single `template.yaml` file and deployed with just two commands.
+
+## 🏗️ Architecture
+
+```
+Client Request
+     ↓
+API Gateway (REST API)
+     ↓
+Lambda Functions (Python 3.11)
+     ↓
+DynamoDB (NoSQL Database)
+```
+
+The application follows a serverless microservices pattern where each Lambda function handles a specific operation (Create, Read, Update, Delete).
+
+## ✨ Features
+
+- ✅ **Complete CRUD Operations** - Create, Read, Update, Delete todos
+- ✅ **Serverless Architecture** - Zero server management, auto-scaling
+- ✅ **Infrastructure as Code** - Single YAML file deployment
+- ✅ **RESTful API Design** - Standard HTTP methods and status codes
+- ✅ **NoSQL Database** - DynamoDB for fast, scalable data storage
+- ✅ **Automatic IAM Policies** - Secure access control between services
+- ✅ **CORS Enabled** - Ready for frontend integration
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| AWS Lambda | Serverless compute functions |
+| API Gateway | REST API endpoints |
+| DynamoDB | NoSQL database |
+| AWS SAM | Infrastructure as Code framework |
+| Python 3.11 | Lambda runtime |
+| CloudFormation | AWS resource provisioning |
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/todos` | Create a new todo |
+| GET | `/todos` | Get all todos |
+| GET | `/todos/{id}` | Get a specific todo |
+| PUT | `/todos/{id}` | Update a todo |
+| DELETE | `/todos/{id}` | Delete a todo |
+
+### Request/Response Examples
+
+**Create Todo (POST /todos)**
+```json
+Request:
+{
+  "title": "Learn AWS SAM",
+  "description": "Complete serverless project"
+}
+
+Response (201):
+{
+  "message": "Todo created successfully",
+  "todo": {
+    "id": "997d1e0f-45aa-4022-b1ef-daf7d25bd345",
+    "title": "Learn AWS SAM",
+    "description": "Complete serverless project",
+    "completed": false,
+    "createdAt": "2025-11-01T20:04:03",
+    "updatedAt": "2025-11-01T20:04:03"
+  }
+}
+```
+
+**Get All Todos (GET /todos)**
+```json
+Response (200):
+{
+  "todos": [...],
+  "count": 5
+}
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- AWS CLI configured with credentials
+- AWS SAM CLI installed
+- Python 3.11+
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/serverless-todo-api.git
+cd serverless-todo-api
+```
+
+2. Build the application
+```bash
+sam build
+```
+
+3. Deploy to AWS
+```bash
+sam deploy --guided
+```
+
+Follow the prompts:
+- Stack Name: `todo-api-stack`
+- AWS Region: `us-east-1` (or your preferred region)
+- Confirm changes: `Y`
+- Allow IAM role creation: `Y`
+- Accept all "no authentication" warnings: `y`
+- Save config: `Y`
+
+## 📦 Deployment
+
+The deployment process creates:
+- 5 Lambda functions (one for each CRUD operation)
+- API Gateway REST API with 5 endpoints
+- DynamoDB table with pay-per-request billing
+- IAM roles with least-privilege policies
+- CloudWatch log groups for monitoring
+
+**Deployment time:** ~2-3 minutes
+
+## 🧪 Testing
+
+### Using PowerShell
+```powershell
+# Create a todo
+$body = @{
+    title = "Test Todo"
+    description = "Testing the API"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "YOUR-API-URL/todos" `
+  -Method POST `
+  -Body $body `
+  -ContentType "application/json"
+
+# Get all todos
+Invoke-RestMethod -Uri "YOUR-API-URL/todos" -Method GET
+```
+
+### Using curl
+```bash
+# Create a todo
+curl -X POST https://YOUR-API-URL/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Test Todo", "description": "Testing the API"}'
+
+# Get all todos
+curl https://YOUR-API-URL/todos
+```
+
+## 📁 Project Structure
+
+```
+serverless-todo-api/
+├── template.yaml           # SAM infrastructure definition
+├── README.md              # Project documentation
+├── samconfig.toml         # SAM deployment configuration
+└── src/
+    ├── create_todo.py     # POST /todos handler
+    ├── get_todos.py       # GET /todos handler
+    ├── get_todo.py        # GET /todos/{id} handler
+    ├── update_todo.py     # PUT /todos/{id} handler
+    └── delete_todo.py     # DELETE /todos/{id} handler
+```
+
+## 📚 Learning Outcomes
+
+Through this project, I gained hands-on experience with:
+
+1. **Serverless Architecture Patterns**
+   - Event-driven computing
+   - Stateless function design
+   - Managed service integration
+
+2. **Infrastructure as Code (IaC)**
+   - CloudFormation/SAM syntax
+   - Resource dependencies
+   - Environment variables and configuration
+
+3. **AWS Services Integration**
+   - Lambda function creation and deployment
+   - API Gateway configuration
+   - DynamoDB table design and operations
+   - IAM policy management
+
+4. **Best Practices**
+   - Error handling and logging
+   - Security with IAM policies
+   - Cost optimization with pay-per-use
+   - API design and RESTful principles
+
+## 💰 Cost Optimization
+
+This architecture is cost-effective because:
+- **Lambda:** Free tier includes 1M requests/month
+- **DynamoDB:** Pay-per-request pricing, no idle costs
+- **API Gateway:** Pay only for API calls made
+- **No servers:** Zero compute costs when not in use
+
+**Estimated cost for development:** < $1/month
+
+## 🔒 Security
+
+- Lambda functions have minimal IAM permissions (least privilege)
+- DynamoDB access restricted to specific Lambda roles
+- API endpoints can be secured with API keys or Cognito (not implemented)
+- All traffic encrypted in transit (HTTPS)
+
+## 🧹 Cleanup
+
+To avoid any charges, delete all resources:
+```bash
+sam delete
+```
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+## 👨‍💻 Author
+
+Mthulisi Zulu
+- LinkedIn:https://www.linkedin.com/feed/zulu mthulisi
+
+
+## 🙏 Acknowledgments
+
+- AWS Documentation
+- AWS SAM Community
+- Cloud Computing Course - Week 4 Assignment
+
+---
+
+⭐ Star this repo if you found it helpful!
